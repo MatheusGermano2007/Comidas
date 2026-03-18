@@ -1,12 +1,12 @@
-import { View, StyleSheet } from 'react-native';
 import { Link, Stack } from 'expo-router';
+import { StyleSheet, View } from 'react-native';
 
 export default function NotFoundScreen() {
   return (
     <>
       <Stack.Screen options={{ title: 'Vazia' }} />
       <View style={styles.container}>
-        <Link href="/" style={styles.button}>
+        <Link href="/about" style={styles.button}>
           volte para Home
         </Link>
       </View>
