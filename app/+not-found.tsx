@@ -6,7 +6,7 @@ export default function NotFoundScreen() {
     <>
       <Stack.Screen options={{ title: 'Vazia' }} />
       <View style={styles.container}>
-        <Link href="/about" style={styles.button}>
+        <Link href="/" style={styles.button}>
           volte para Home
         </Link>
       </View>
