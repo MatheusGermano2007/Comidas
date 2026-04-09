@@ -4,36 +4,58 @@ import { Tabs } from 'expo-router';
 export default function TabLayout() {
   return (
     <Tabs
-  screenOptions={{
-    tabBarActiveTintColor: '#ffd33d',
-    headerStyle: {
-      backgroundColor: '#25292e',
-    },
-    headerShadowVisible: false,
-    headerTintColor: '#fff',
-    tabBarStyle: {
-      backgroundColor: '#25292e',
-    },
-  }}
->
+      screenOptions={{
+        tabBarActiveTintColor: '#ffd33d', 
+        tabBarInactiveTintColor: '#ffffff', 
+        headerStyle: {
+          backgroundColor: '#ff8800ff',
+        },
+        headerShadowVisible: false,
+        headerTintColor: '#fff',
+        tabBarStyle: {
+          backgroundColor: '#ff8800ff',
+        },
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: 'Início',
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? 'home-sharp' : 'home-outline'} color={color} size={24} />
+            <Ionicons name={focused ? 'restaurant' : 'restaurant-outline'} color={color} size={24} />
           ),
         }}
       />
+      
+      <Tabs.Screen
+        name="toDoList"
+        options={{
+          title: 'Lista',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons name={focused ? 'cart' : 'cart-outline'} color={color} size={24} />
+          ),
+        }}
+      />
+
       <Tabs.Screen
         name="about"
         options={{
-          title: 'About',
+          title: 'Sobre o app',
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? 'information-circle' : 'information-circle-outline'} color={color} size={24}/>
           ),
         }}
       />
+
+      <Tabs.Screen
+        name="receitas"
+        options={{
+          title: 'Cardápio',
+          href: null, 
+        }}
+      />
+
     </Tabs>
+    
   );
 }
