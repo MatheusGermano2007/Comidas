@@ -5,15 +5,15 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#ffd33d', 
-        tabBarInactiveTintColor: '#ffffff', 
+        tabBarActiveTintColor: '#ffd33d',
+        tabBarInactiveTintColor: '#ffffff',
         headerStyle: {
-          backgroundColor: '#ff8800ff',
+          backgroundColor: '#ff8800',
         },
         headerShadowVisible: false,
         headerTintColor: '#fff',
         tabBarStyle: {
-          backgroundColor: '#ff8800ff',
+          backgroundColor: '#ff8800',
         },
       }}
     >
@@ -21,6 +21,16 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Início',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons name={focused ? 'home' : 'home-outline'} color={color} size={24} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="receitas"
+        options={{
+          title: 'Cardápio',
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? 'restaurant' : 'restaurant-outline'} color={color} size={24} />
           ),
@@ -40,22 +50,12 @@ export default function TabLayout() {
       <Tabs.Screen
         name="about"
         options={{
-          title: 'Sobre o app',
+          title: 'Sobre',
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? 'information-circle' : 'information-circle-outline'} color={color} size={24}/>
           ),
         }}
       />
-
-      <Tabs.Screen
-        name="receitas"
-        options={{
-          title: 'Cardápio',
-          href: null, 
-        }}
-      />
-
     </Tabs>
-    
   );
 }

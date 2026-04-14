@@ -1,23 +1,30 @@
 import { useState } from 'react';
 
-interface Tarefa {
-  id: string;
-  texto: string;
-}
-
-export function useTarefas() {
-  const [tarefas, setTarefas] = useState<Tarefa[]>([]);
-  const [novaTarefa, setNovaTarefa] = useState<string>('');
+export const useTarefas = () => {
+  const [tarefas, setTarefas] = useState<any[]>([]);
+  const [novaTarefa, setNovaTarefa] = useState('');
 
   const adicionarTarefa = () => {
-    if (novaTarefa.trim() === '') return;
-    setTarefas([...tarefas, { id: Date.now().toString(), texto: novaTarefa }]);
-    setNovaTarefa('');
+    if (novaTarefa.trim()) {
+      setTarefas([...tarefas, { id: Date.now().toString(), texto: novaTarefa }]);
+      setNovaTarefa('');
+    }
   };
 
   const removerTarefa = (id: string) => {
-    setTarefas(tarefas.filter((tarefa) => tarefa.id !== id));
+    setTarefas(tarefas.filter(t => t.id !== id));
   };
 
-  return { tarefas, novaTarefa, setNovaTarefa, adicionarTarefa, removerTarefa };
-}
+  const limparLista = () => {
+    setTarefas([]);
+  };
+
+  return {
+    tarefas,
+    novaTarefa,
+    setNovaTarefa,
+    adicionarTarefa,
+    removerTarefa,
+    limparLista,
+  };
+};
