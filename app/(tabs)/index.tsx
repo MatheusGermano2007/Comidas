@@ -25,7 +25,7 @@ export default function Index() {
   };
 
   return (
-    // 1. Trocamos a View principal por um ScrollView
+  
     <ScrollView contentContainerStyle={styles.container}>
       
       <View style={styles.imageContainer}>
@@ -51,22 +51,22 @@ export default function Index() {
 
 const styles = StyleSheet.create({
   container: {
-    // 2. Usamos flexGrow em vez de flex para permitir a rolagem
+   
     flexGrow: 1,
     backgroundColor: "#FF9800",
     alignItems: "center",
-    // 3. Ajustamos o padding para dar espaço para rolar
+   
     paddingVertical: 40, 
     paddingHorizontal: 20,
   },
   imageContainer: {
-    // 4. Removemos o flex: 1 para não forçar o esmagamento
-    marginBottom: 20, // Dá um respiro entre a imagem e os botões
+    
+    marginBottom: 20, 
   },
   footerContainer: {
-    // 5. Removemos o flex: 1/3 para os botões ocuparem seu espaço natural
+    
     alignItems: 'center',
-    marginBottom: 30, // Dá um respiro antes de começar os emojis
+    marginBottom: 30, 
   },
   emoji: { 
     fontSize: 50, 
