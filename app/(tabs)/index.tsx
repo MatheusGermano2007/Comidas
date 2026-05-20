@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Text, View, StyleSheet, ScrollView } from "react-native";
 import { Link } from "expo-router";
-import ImageViewer from '@/components/imageViewer';
-import Button from '@/components/Button';
 import * as ImagePicker from 'expo-image-picker';
+
+import ImageViewer from '@/components/imageViewer'; // Certifique-se de que o nome do arquivo seja exatamente este (maiúsculas/minúsculas)
+import Button from '@/components/Button';
 
 const PlaceholderImage = require('@/assets/images/background-image.png');
 
@@ -25,7 +26,6 @@ export default function Index() {
   };
 
   return (
-  
     <ScrollView contentContainerStyle={styles.container}>
       
       <View style={styles.imageContainer}>
@@ -51,20 +51,16 @@ export default function Index() {
 
 const styles = StyleSheet.create({
   container: {
-   
     flexGrow: 1,
     backgroundColor: "#FF9800",
     alignItems: "center",
-   
     paddingVertical: 40, 
     paddingHorizontal: 20,
   },
   imageContainer: {
-    
     marginBottom: 20, 
   },
   footerContainer: {
-    
     alignItems: 'center',
     marginBottom: 30, 
   },
