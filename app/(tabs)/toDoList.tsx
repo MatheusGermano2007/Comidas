@@ -1,20 +1,31 @@
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router'; 
 import React, { useEffect, useState } from 'react';
 import { Button, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useTarefas } from '../../hooks/useTarefas';
 
 export default function App() {
   const { tarefas, novaTarefa, setNovaTarefa, adicionarTarefa, removerTarefa, limparLista } = useTarefas();
-  const { receita } = useLocalSearchParams();
+  
+  const { nomeDaReceita, receita } = useLocalSearchParams();
+  const router = useRouter(); 
 
-  const [receitaVisivel, setReceitaVisivel] = useState(receita);
+  const receitaRecebida = nomeDaReceita || receita;
+
+  const [receitaVisivel, setReceitaVisivel] = useState(receitaRecebida);
 
   useEffect(() => {
-    if (receita) {
+    if (receitaRecebida && receitaRecebida !== receitaVisivel) {
       limparLista(); 
-      setReceitaVisivel(receita);
+      setReceitaVisivel(receitaRecebida);
     }
-  }, [receita]);
+  }, [receitaRecebida]);
+
+  
+  const fecharReceita = () => {
+    setReceitaVisivel(''); 
+    limparLista(); 
+    router.setParams({ nomeDaReceita: '', receita: '' }); 
+  };
 
   return (
     <View style={styles.container}>
@@ -23,6 +34,11 @@ export default function App() {
           <Text style={styles.label}>Ingredientes para:</Text>
           <View style={styles.row}>
             <Text style={styles.nomeReceita}>{receitaVisivel}</Text>
+            
+            {}
+            <TouchableOpacity onPress={fecharReceita}>
+              <Text style={styles.fechar}>X</Text>
+            </TouchableOpacity>
             
           </View>
         </View>
@@ -37,7 +53,7 @@ export default function App() {
           value={novaTarefa}
           onChangeText={setNovaTarefa}
         />
-        <Button title="Ok" onPress={adicionarTarefa} color="#ff8800" />
+        <Button title="Ok" onPress={adicionarTarefa} color="#E65100" />
       </View>
 
       <FlatList
@@ -67,8 +83,8 @@ const styles = StyleSheet.create({
   },
   label: { fontSize: 14, color: '#666' },
   row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  nomeReceita: { fontSize: 22, fontWeight: 'bold', color: '#E65100' },
-  fechar: { fontSize: 20, color: '#999', fontWeight: 'bold', padding: 5 },
+  nomeReceita: { fontSize: 22, fontWeight: 'bold', color: '#E65100', flex: 1 }, 
+  fechar: { fontSize: 20, color: '#999', fontWeight: 'bold', padding: 5, marginLeft: 10 },
   titulo: { fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginBottom: 20, color: '#fff' },
   inputContainer: { flexDirection: 'row', marginBottom: 20 },
   input: { 

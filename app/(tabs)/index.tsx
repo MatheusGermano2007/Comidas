@@ -1,19 +1,19 @@
-import { useState, useRef } from 'react';
-import { Text, View, StyleSheet, ScrollView, ImageSourcePropType, Platform } from "react-native";
-import { Link } from "expo-router";
-import * as ImagePicker from 'expo-image-picker';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import * as MediaLibrary from 'expo-media-library';
-import { captureRef } from 'react-native-view-shot';
 import domtoimage from 'dom-to-image';
+import * as ImagePicker from 'expo-image-picker';
+import * as MediaLibrary from 'expo-media-library';
+import { Link, useRouter } from "expo-router";
+import { useEffect, useRef, useState } from 'react';
+import { Image, ImageSourcePropType, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { captureRef } from 'react-native-view-shot';
 
-import ImageViewer from '@/components/imageViewer';
 import Button from '@/components/Button';
-import IconButton from '@/components/IconButton';
 import CircleButton from '@/components/CircleButton';
+import EmojiList from '@/components/EmojiList';
 import EmojiPicker from '@/components/EmojiPicker';
-import EmojiList from '@/components/EmojiList'; 
-import EmojiSticker from '@/components/EmojiSticker'; 
+import EmojiSticker from '@/components/EmojiSticker';
+import IconButton from '@/components/IconButton';
+import ImageViewer from '@/components/imageViewer';
 
 const PlaceholderImage = require('@/assets/images/emoji1.png');
 
@@ -22,13 +22,32 @@ export default function Index() {
   const [showAppOptions, setShowAppOptions] = useState<boolean>(false);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [pickedEmoji, setPickedEmoji] = useState<ImageSourcePropType | undefined>(undefined);
+  const [randomRecipe, setRandomRecipe] = useState<any>(null);
   
   const [status, requestPermission] = MediaLibrary.usePermissions();
   const imageRef = useRef<any>(null);
+  
+  const router = useRouter(); 
 
   if (status === null) {
     requestPermission();
   }
+
+  const fetchRandomRecipe = async () => {
+    try {
+      const response = await fetch('https://www.themealdb.com/api/json/v1/1/random.php');
+      const data = await response.json();
+      if (data.meals && data.meals.length > 0) {
+        setRandomRecipe(data.meals[0]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchRandomRecipe();
+  }, []);
 
   const pickImageAsync = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -96,6 +115,16 @@ export default function Index() {
     }
   };
 
+
+  const handleMakeRecipe = () => {
+    if (randomRecipe) {
+      router.push({
+        pathname: "/toDoList", 
+        params: { nomeDaReceita: randomRecipe.strMeal }
+      });
+    }
+  };
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={styles.container}>
@@ -119,7 +148,6 @@ export default function Index() {
           <View style={styles.welcomeContainer}>
             <View style={styles.footerContainer}>
               <Button theme="primary" label="Escolha uma foto" onPress={pickImageAsync} />
-              <Button label="Use essa foto" onPress={() => setShowAppOptions(true)} />
             </View>
 
             <Text style={styles.emoji}>🍔🥗🍕</Text>
@@ -129,6 +157,24 @@ export default function Index() {
             <Link href="/receitas" style={styles.button}>
                 Ver opções de refeição
             </Link>
+
+            {randomRecipe && (
+              <View style={styles.recipeCard}>
+                {}
+                <TouchableOpacity onPress={fetchRandomRecipe} activeOpacity={0.8} style={styles.recipeTouchArea}>
+                  <Text style={styles.recipeCardTitle}>Sugestão do Chef 👨‍🍳</Text>
+                  <Image source={{ uri: randomRecipe.strMealThumb }} style={styles.recipeImage} />
+                  <Text style={styles.recipeName}>{randomRecipe.strMeal}</Text>
+                  <Text style={styles.recipeCategory}>Categoria: {randomRecipe.strCategory}</Text>
+                  <Text style={styles.hintText}>(Toque para mudar)</Text>
+                </TouchableOpacity>
+
+                {}
+                <TouchableOpacity style={styles.makeRecipeButton} onPress={handleMakeRecipe}>
+                  <Text style={styles.makeRecipeButtonText}>Fazer essa receita sugerida</Text>
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
         )}
 
@@ -195,5 +241,64 @@ const styles = StyleSheet.create({
     fontSize: 18,
     overflow: 'hidden',
     textAlign: 'center',
+    marginBottom: 35,
+  },
+  recipeCard: {
+    backgroundColor: '#ffffff',
+    borderRadius: 12,
+    width: '100%',
+    maxWidth: 320,
+    marginTop: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    overflow: 'hidden',
+  },
+  recipeTouchArea: {
+    padding: 15,
+    alignItems: 'center',
+  },
+  recipeCardTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333333',
+    marginBottom: 10,
+  },
+  recipeImage: {
+    width: 120,
+    height: 120,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  recipeName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#FF9800',
+    textAlign: 'center',
+    marginBottom: 2,
+  },
+  recipeCategory: {
+    fontSize: 14,
+    color: '#666666',
+  },
+  hintText: {
+    fontSize: 12,
+    color: '#aaaaaa',
+    marginTop: 5,
+  },
+  makeRecipeButton: {
+    backgroundColor: '#FF9800',
+    paddingVertical: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderTopWidth: 1,
+    borderTopColor: '#f0f0f0',
+  },
+  makeRecipeButtonText: {
+    color: '#ffffff',
+    fontWeight: 'bold',
+    fontSize: 16,
   }
 });
